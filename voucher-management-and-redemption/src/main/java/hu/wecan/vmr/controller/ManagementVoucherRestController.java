@@ -28,7 +28,7 @@ public class ManagementVoucherRestController {
 	private IVoucherService voucherService;
 
 	@GetMapping("/vouchers")
-	public List<VoucherDto> getAllEmployees() {
+	public List<VoucherDto> getAllVouchers() {
 		return voucherService.findAll();
 	}
 
