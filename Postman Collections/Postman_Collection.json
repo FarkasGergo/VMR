@@ -1,0 +1,733 @@
+{
+	"info": {
+		"_postman_id": "4f00a274-6d13-48e5-9d2d-5b66274571b0",
+		"name": "VMR application",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Examples for requests",
+			"item": [
+				{
+					"name": "getVoucherById",
+					"_postman_id": "5be10d94-edab-4f92-9509-9d3ea6361c72",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/vmr/management/v1/vouchers/1"
+					},
+					"response": []
+				},
+				{
+					"name": "createVoucher",
+					"_postman_id": "e20d297b-110e-4122-9458-e869f5d6631d",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"test from Postman\",\r\n    \"limitation\": \"LIMITED\",\r\n    \"redemptionLimit\": 3,\r\n    \"deadline\": \"2022-09-01\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/vmr/management/v1/vouchers"
+					},
+					"response": []
+				},
+				{
+					"name": "deleteVoucher",
+					"_postman_id": "655b94fe-d083-4bfc-9abb-f7fb753f2f92",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:8080/vmr/management/v1/vouchers/1"
+					},
+					"response": []
+				},
+				{
+					"name": "redeemVoucher",
+					"_postman_id": "a222b386-02d6-4bd3-befa-46a9102bfa10",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/vmr/client/v1/vouchers/1"
+					},
+					"response": []
+				},
+				{
+					"name": "findAllVouchers",
+					"_postman_id": "febd3056-f0c7-4cd2-be9d-c5af18498b02",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/vmr/management/v1/vouchers"
+					},
+					"response": []
+				}
+			],
+			"_postman_id": "4b6dc541-867f-474e-b613-08774a5ecf45"
+		},
+		{
+			"name": "1. TestCase: X times redeemable voucher",
+			"item": [
+				{
+					"name": "Create a 3 times redeemable voucher",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "79ea794e-5b5e-4dbd-b35d-b771d777036d",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const {id, name, limitation, redemptionLimit, remainingRedemption, deadline } = pm.response.json();\r",
+									"\r",
+									"pm.collectionVariables.set(\"voucherId\", id);\r",
+									"\r",
+									"pm.test(\"Content is appropriate.\", () => {\r",
+									"  pm.expect(limitation).to.eql(\"LIMITED\");\r",
+									"  pm.expect(redemptionLimit).to.eql(3);\r",
+									"  pm.expect(remainingRedemption).to.eql(3);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"_postman_id": "61fa69f1-3449-492e-958c-72517d25022f",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"3 times redeemable voucher\",\r\n    \"limitation\": \"LIMITED\",\r\n    \"redemptionLimit\": 3,\r\n    \"deadline\": \"2023-01-01\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/vmr/management/v1/vouchers"
+					},
+					"response": []
+				},
+				{
+					"name": "Verify new voucher exists",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "3e0c1014-e532-4e7e-83d8-ab793c648aab",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const {id, name, limitation, redemptionLimit, remainingRedemption, deadline } = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Content is appropriate.\", () => {\r",
+									"  pm.expect(limitation).to.eql(\"LIMITED\");\r",
+									"  pm.expect(redemptionLimit).to.eql(3);\r",
+									"  pm.expect(remainingRedemption).to.eql(3);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"_postman_id": "2e83869b-786f-4af9-b274-c2445dded6e2",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/vmr/management/v1/vouchers/{{voucherId}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Redeem voucher first time",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e171ad70-9f9e-4f6c-85e8-d15d870a6e60",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const {id, name, limitation, redemptionLimit, remainingRedemption, deadline } = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Content is appropriate.\", () => {\r",
+									"  pm.expect(limitation).to.eql(\"LIMITED\");\r",
+									"  pm.expect(redemptionLimit).to.eql(3);\r",
+									"  pm.expect(remainingRedemption).to.eql(2);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"_postman_id": "4f406b39-3751-4c39-8700-499ca755f102",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/vmr/client/v1/vouchers/{{voucherId}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Redeem voucher second time",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e171ad70-9f9e-4f6c-85e8-d15d870a6e60",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const {id, name, limitation, redemptionLimit, remainingRedemption, deadline } = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Content is appropriate.\", () => {\r",
+									"  pm.expect(limitation).to.eql(\"LIMITED\");\r",
+									"  pm.expect(redemptionLimit).to.eql(3);\r",
+									"  pm.expect(remainingRedemption).to.eql(1);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"_postman_id": "509f537f-2a63-4c41-b908-665e19887294",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/vmr/client/v1/vouchers/{{voucherId}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Redeem voucher third time",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e171ad70-9f9e-4f6c-85e8-d15d870a6e60",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const {id, name, limitation, redemptionLimit, remainingRedemption, deadline } = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Content is appropriate.\", () => {\r",
+									"  pm.expect(limitation).to.eql(\"LIMITED\");\r",
+									"  pm.expect(redemptionLimit).to.eql(3);\r",
+									"  pm.expect(remainingRedemption).to.eql(0);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"_postman_id": "8fc605f4-f59e-42c5-a371-92781f438d8f",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/vmr/client/v1/vouchers/{{voucherId}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Verify that voucher can no longer be redeemed",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e171ad70-9f9e-4f6c-85e8-d15d870a6e60",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"  pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"const {timestamp, message, details} = pm.response.json();\r",
+									"\r",
+									"let voucherId = pm.collectionVariables.get(\"voucherId\");\r",
+									"\r",
+									"pm.test(\"Content is appropriate.\", () => {\r",
+									"  pm.expect(message).to.eql(\"Voucher is not redeemable. Id: \" + voucherId );\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"_postman_id": "c9cf2424-8484-4f47-9d01-f599e0f28e04",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/vmr/client/v1/vouchers/{{voucherId}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Voucher",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f17cf100-d54e-4851-a3ed-ddcaaed44e43",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"_postman_id": "202f0a1b-f2b0-4c98-bfe7-eba4f604e8cd",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:8080/vmr/management/v1/vouchers/{{voucherId}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Verify that voucher no longer exists",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "3e0c1014-e532-4e7e-83d8-ab793c648aab",
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"  pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"const {timestamp, message, details} = pm.response.json();\r",
+									"\r",
+									"let voucherId = pm.collectionVariables.get(\"voucherId\");\r",
+									"\r",
+									"pm.test(\"Content is appropriate.\", () => {\r",
+									"  pm.expect(message).to.eql(\"Voucher not found for this id: \" + voucherId );\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"_postman_id": "a14b0c24-cfb0-4ed7-aba5-5516794ee2af",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/vmr/management/v1/vouchers/{{voucherId}}"
+					},
+					"response": []
+				}
+			],
+			"_postman_id": "1016d99c-5b49-4385-abcb-a8103491936a"
+		},
+		{
+			"name": "2. TestCase: unlimited redeemable voucher",
+			"item": [
+				{
+					"name": "Create an unlimited times redeemable voucher",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "79ea794e-5b5e-4dbd-b35d-b771d777036d",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const {id, name, limitation, redemptionLimit, remainingRedemption, deadline } = pm.response.json();\r",
+									"\r",
+									"pm.collectionVariables.set(\"voucherId\", id);\r",
+									"\r",
+									"pm.test(\"Content is appropriate.\", () => {\r",
+									"  pm.expect(limitation).to.eql(\"UNLIMITED\");\r",
+									"  pm.expect(redemptionLimit).to.eql(0);\r",
+									"  pm.expect(remainingRedemption).to.eql(0);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"_postman_id": "9663e414-c139-45a5-9fb2-1cd07a44f32a",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Unlimited times redeemable voucher\",\r\n    \"limitation\": \"UNLIMITED\",\r\n    \"redemptionLimit\": 3,\r\n    \"deadline\": \"2023-01-01\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/vmr/management/v1/vouchers"
+					},
+					"response": []
+				},
+				{
+					"name": "Verify new voucher exists",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "3e0c1014-e532-4e7e-83d8-ab793c648aab",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const {id, name, limitation, redemptionLimit, remainingRedemption, deadline } = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Content is appropriate.\", () => {\r",
+									"  pm.expect(limitation).to.eql(\"UNLIMITED\");\r",
+									"  pm.expect(redemptionLimit).to.eql(0);\r",
+									"  pm.expect(remainingRedemption).to.eql(0);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"_postman_id": "e41625da-65de-476e-ba90-6a3b45d2a9a0",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/vmr/management/v1/vouchers/{{voucherId}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Redeem voucher",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e171ad70-9f9e-4f6c-85e8-d15d870a6e60",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const {id, name, limitation, redemptionLimit, remainingRedemption, deadline } = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Content is appropriate.\", () => {\r",
+									"  pm.expect(limitation).to.eql(\"UNLIMITED\");\r",
+									"  pm.expect(redemptionLimit).to.eql(0);\r",
+									"  pm.expect(remainingRedemption).to.eql(0);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"_postman_id": "56923723-e451-4118-8001-1accfe33c10a",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/vmr/client/v1/vouchers/{{voucherId}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Voucher",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f17cf100-d54e-4851-a3ed-ddcaaed44e43",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"_postman_id": "b1621a63-5f51-42ca-869d-bc244722afbd",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:8080/vmr/management/v1/vouchers/{{voucherId}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Verify than voucher no longer exists",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "3e0c1014-e532-4e7e-83d8-ab793c648aab",
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"  pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"const {timestamp, message, details} = pm.response.json();\r",
+									"\r",
+									"let voucherId = pm.collectionVariables.get(\"voucherId\");\r",
+									"\r",
+									"pm.test(\"Content is appropriate.\", () => {\r",
+									"  pm.expect(message).to.eql(\"Voucher not found for this id: \" + voucherId );\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"_postman_id": "f15240ea-1cae-4ae5-99e0-10126db02435",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/vmr/management/v1/vouchers/{{voucherId}}"
+					},
+					"response": []
+				}
+			],
+			"_postman_id": "4a3e6799-8887-4199-9c9d-4ba668a4eb03"
+		},
+		{
+			"name": "3. TestCase: deadline expiration",
+			"item": [
+				{
+					"name": "Get all vouchers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a9fafcc1-59e5-423a-b256-4bf94ae66b92",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"_postman_id": "b78c5ca8-a826-49f2-94a8-f6faa9be2f70",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/vmr/management/v1/vouchers"
+					},
+					"response": []
+				},
+				{
+					"name": "Get example voucher with expired deadline",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "3e0c1014-e532-4e7e-83d8-ab793c648aab",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const {id, name, limitation, redemptionLimit, remainingRedemption, deadline } = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Content is appropriate.\", () => {\r",
+									"  pm.expect(name).to.eql(\"test_voucher_limited_expired\");\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"_postman_id": "92f19221-7ff6-4a43-840a-f35301a6481b",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/vmr/management/v1/vouchers/3"
+					},
+					"response": []
+				},
+				{
+					"name": "Redeem voucher",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e171ad70-9f9e-4f6c-85e8-d15d870a6e60",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"  pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"const {timestamp, message, details} = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Content is appropriate.\", () => {\r",
+									"  pm.expect(message).to.eql(\"Voucher is not redeemable. Id: 3\");\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"_postman_id": "3d10e71c-7798-4be2-b0bb-fad8e5eb5d4d",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/vmr/client/v1/vouchers/3"
+					},
+					"response": []
+				}
+			],
+			"_postman_id": "5f02a418-3444-4371-9eda-637193dc061c"
+		}
+	],
+	"variable": [
+		{
+			"id": "113f1913-ac4a-4081-9131-ca84190481ce",
+			"key": "voucherId",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
