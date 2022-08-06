@@ -70,7 +70,7 @@ public class VoucherService implements IVoucherService {
 
 	private Voucher findVoucherById(long id) throws ResourceNotFoundException {
 		Voucher voucher = voucherRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Voucher not found for this id :: " + id));
+				.orElseThrow(() -> new ResourceNotFoundException("Voucher not found for this id: " + id));
 
 		return voucher;
 	}
